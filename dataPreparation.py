@@ -47,10 +47,10 @@ def cleanData(data):
     
     return data
 
-def readAndCleanData():
-    train =  pd.read_csv('data/tryTrain.csv', nrows=3000000)
+def readAndCleanData(trainPath,testPath):
+    train =  pd.read_csv(trainPath, nrows=3000000)
     #print(train.dtypes)
-    test = pd.read_csv('data/tryTest.csv')
+    test = pd.read_csv(testPath)
     #print(test.dtypes)
     train = cleanData(train)
     test = cleanData(test)

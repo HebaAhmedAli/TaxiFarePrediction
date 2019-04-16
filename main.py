@@ -1,6 +1,6 @@
 import dataPreparation
 
-train,test = dataPreparation.readAndCleanData()
+train,test = dataPreparation.readAndCleanData('data/tryTrain.csv','data/tryTest.csv')
 print("Shape of Training Data after cleaning ",train.shape)
 print("Shape of Testing Data after cleaning", test.shape)
 
