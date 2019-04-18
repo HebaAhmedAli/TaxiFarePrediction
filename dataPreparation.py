@@ -1,8 +1,7 @@
-import numpy as np # linear algebra
 import pandas as pd # CSV file I/O (e.g. pd.read_csv)
 from sklearn.model_selection import train_test_split
 import calendar
-
+import utils
 
 def encodeDays(dayOfWeek):
     dayDict={'Sunday':0,'Monday':1,'Tuesday':2,'Wednesday':3,'Thursday':4,'Friday':5,'Saturday':6}
@@ -55,6 +54,7 @@ def readAndCleanData(trainPath,testPath):
     train = cleanData(train)
     test = cleanData(test)
     return train,test
+    
 
 def prepareDataForModel(data,target,dropCols,isTrain=True,split=0.25):
     dataPrepared=data.drop(dropCols,axis=1)
@@ -74,3 +74,46 @@ def prepareDataForModel(data,target,dropCols,isTrain=True,split=0.25):
     else:
         print ("Shape of Test Data",dataPrepared.shape)
         return dataPrepared
+
+def addFeatureEngineering(data):
+    # Add features of weather the pickup or dropoff isAirport.
+    data['is_pickup_la_guardia']=data.apply(lambda row:utils.isAirport(row['pickup_latitude'],row['pickup_longitude'],'LaGuardia'),axis=1)
+    data['is_dropoff_la_guardia']=data.apply(lambda row:utils.isAirport(row['dropoff_latitude'],row['dropoff_longitude'],'LaGuardia'),axis=1)
+    data['is_pickup_EWR']=data.apply(lambda row:utils.isAirport(row['pickup_latitude'],row['pickup_longitude'],'EWR'),axis=1)
+    data['is_dropoff_EWR']=data.apply(lambda row:utils.isAirport(row['dropoff_latitude'],row['dropoff_longitude'],'EWR'),axis=1)
+    data['is_pickup_JFK']=data.apply(lambda row:utils.isAirport(row['pickup_latitude'],row['pickup_longitude'],'JFK'),axis=1)
+    data['is_dropoff_JFK']=data.apply(lambda row:utils.isAirport(row['dropoff_latitude'],row['dropoff_longitude'],'JFK'),axis=1)
+    
+    # Add features of weather the pickup or dropoff is Borough or other
+    data['pickup_borough']=data.apply(lambda row:utils.getBorough(row['pickup_latitude'],row['pickup_longitude']),axis=1)
+    data['dropoff_borough']=data.apply(lambda row:utils.getBorough(row['dropoff_latitude'],row['dropoff_longitude']),axis=1)
+    
+    data=pd.get_dummies(data)
+    
+    # Add is_lower_manhattan feature.
+    data['is_pickup_lower_manhattan']=data.apply(lambda row:utils.isLowerManhattan(row['pickup_latitude'],row['pickup_longitude']),axis=1)
+    data['is_dropoff_lower_manhattan']=data.apply(lambda row:utils.isLowerManhattan(row['dropoff_latitude'],row['dropoff_longitude']),axis=1)
+    
+    # Add utils.distance of pickup and dropoff to airports.
+    data['pickup_utils.distance_jfk']=data.apply(lambda row:utils.distance(row['pickup_latitude'],row['pickup_longitude'],constants.jfk[1],constants.jfk[0]),axis=1)
+    data['dropoff_utils.distance_jfk']=data.apply(lambda row:utils.distance(row['dropoff_latitude'],row['dropoff_longitude'],constants.jfk[1],constants.jfk[0]),axis=1)
+    data['pickup_utils.distance_ewr']=data.apply(lambda row:utils.distance(row['pickup_latitude'],row['pickup_longitude'],constants.ewr[1],constants.ewr[0]),axis=1)
+    data['dropoff_utils.distance_ewr']=data.apply(lambda row:utils.distance(row['dropoff_latitude'],row['dropoff_longitude'],constants.ewr[1],constants.ewr[0]),axis=1)
+    data['pickup_utils.distance_laguardia']=data.apply(lambda row:utils.distance(row['pickup_latitude'],row['pickup_longitude'],constants.lgr[1],constants.lgr[0]),axis=1)
+    data['dropoff_utils.distance_laguardia']=data.apply(lambda row:utils.distance(row['dropoff_latitude'],row['dropoff_longitude'],constants.lgr[1],constants.lgr[0]),axis=1)
+
+    # Add utils.distance of pickup and dropoff to boroughs.
+    data['pickup_utils.distance_manhattan']=data.apply(lambda row:utils.distance(row['pickup_latitude'],row['pickup_longitude'],constants.manhattan[1],constants.manhattan[0]),axis=1)
+    data['pickup_utils.distance_queens']=data.apply(lambda row:utils.distance(row['pickup_latitude'],row['pickup_longitude'],constants.queens[1],constants.queens[0]),axis=1)
+    data['pickup_utils.distance_brooklyn']=data.apply(lambda row:utils.distance(row['pickup_latitude'],row['pickup_longitude'],constants.brooklyn[1],constants.brooklyn[0]),axis=1)
+    data['pickup_utils.distance_bronx']=data.apply(lambda row:utils.distance(row['pickup_latitude'],row['pickup_longitude'],constants.bronx[1],constants.bronx[0]),axis=1)
+    data['pickup_utils.distance_statenisland']=data.apply(lambda row:utils.distance(row['pickup_latitude'],row['pickup_longitude'],constants.staten_island[1],constants.staten_island[0]),axis=1)
+
+    data['dropoff_utils.distance_manhattan']=data.apply(lambda row:utils.distance(row['dropoff_latitude'],row['dropoff_longitude'],constants.manhattan[1],constants.manhattan[0]),axis=1)
+    data['dropoff_utils.distance_queens']=data.apply(lambda row:utils.distance(row['dropoff_latitude'],row['dropoff_longitude'],constants.queens[1],constants.queens[0]),axis=1)
+    data['dropoff_utils.distance_brooklyn']=data.apply(lambda row:utils.distance(row['dropoff_latitude'],row['dropoff_longitude'],constants.brooklyn[1],constants.brooklyn[0]),axis=1)
+    data['dropoff_utils.distance_bronx']=data.apply(lambda row:utils.distance(row['dropoff_latitude'],row['dropoff_longitude'],constants.bronx[1],constants.bronx[0]),axis=1)
+    data['dropoff_utils.distance_statenisland']=data.apply(lambda row:utils.distance(row['dropoff_latitude'],row['dropoff_longitude'],constants.staten_island[1],constants.staten_island[0]),axis=1)
+
+
+    return data
