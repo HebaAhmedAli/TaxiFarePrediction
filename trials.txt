@@ -1,5 +1,8 @@
 lightGBM 
 --------
+RMSE for Light GBM is  3.7930303182366956
+Train RMSE for Light GBM is  3.0714755387307826
+Variance of Light GBM is  -0.721554779505913
 
 
 lightGBM after adding feature engineering

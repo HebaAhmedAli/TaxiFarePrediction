@@ -26,5 +26,17 @@ testData.to_csv("data/sample_test_cleaned.csv",index=False)
 
 
 # TODO: Call model training and testing here.
-lgbBst=lightGBM.getTrainedLgbModel(xTrain,yTrain)
+#lgbBst=lightGBM.getTrainedLgbModel(xTrain,yTrain)
+#lightGBM.predictAndEvaluateModel(lgbBst,xTest,yTest,xTrain,yTrain)
+
+# The best tuned paramters -we tune the paramters in colab notebook and get final results here-
+best = {'x_max_depth': 24.0, 
+        'x_subsample': 0.9988461076307639, 
+        'x_colsample': 0.38429620148564814,
+        'x_learning_rate': 0.1,
+        'x_num_leaves': 60,
+        'x_subsample_freq': 100,
+        'x_n_estimators': 5000
+        }
+lgbBst=lightGBM.getTrainedLgbModelAfterTuning(best,xTrain,yTrain,xTest,yTest)
 lightGBM.predictAndEvaluateModel(lgbBst,xTest,yTest,xTrain,yTrain)

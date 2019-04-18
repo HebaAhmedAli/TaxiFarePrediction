@@ -24,3 +24,22 @@ def predictAndEvaluateModel(lgb_bst,xTest,yTest,xTrain,yTrain):
 
     variance=lgb_train_rmse - lgb_rmse
     print("Variance of Light GBM is ", variance)
+    return lgb_pred
+    
+def getTrainedLgbModelAfterTuning(best,xTrain,yTrain,xTest,yTest):
+    lgb_bst = lgb.LGBMRegressor(
+        objective = 'regression',
+        n_jobs = -1, 
+        verbose=1,
+        learning_rate = best['x_learning_rate'],
+        boosting_type='gbdt',
+        num_leaves=int(best['x_num_leaves']),
+        subsample_freq=int(best['x_subsample_freq']),
+        max_depth=int(best['x_max_depth']),
+        subsample=best['x_subsample'],
+        n_estimators=int(best['x_n_estimators']),
+        colsample_bytree=best['x_colsample'])
+    
+    eval_set=[( xTrain, yTrain), (xTest,yTest)]
+    lgb_bst.fit(xTrain, np.array(yTrain),eval_set=eval_set,eval_metric='rmse',early_stopping_rounds=20)
+    return lgb_bst
