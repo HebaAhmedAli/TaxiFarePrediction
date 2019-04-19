@@ -56,6 +56,12 @@ def readAndCleanData(trainPath,testPath):
     test = cleanData(test)
     return train,test
     
+def readDataforAnalysis(trainPath,testPath):
+    train =  pd.read_csv(trainPath, nrows=3000000)
+    #print(train.dtypes)
+    test = pd.read_csv(testPath)
+    return train,test
+
 
 def prepareDataForModel(data,target,dropCols,isTrain=True,split=0.25):
     dataPrepared=data.drop(dropCols,axis=1)
