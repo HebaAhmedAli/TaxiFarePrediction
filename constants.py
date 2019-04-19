@@ -61,3 +61,10 @@ nyc_boroughs={
     
     
 }
+
+
+
+lower_manhattan_boundary={'min_lng': -74.0194,
+                          'min_lat':40.6997,
+                          'max_lng':-73.9716,
+                          'max_lat':40.7427}

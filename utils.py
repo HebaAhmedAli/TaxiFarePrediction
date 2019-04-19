@@ -10,21 +10,21 @@ def distance(lat1, lat2, lon1,lon2):
 
 def isAirport(latitude,longitude,airport_name='JFK'):
     
-    if latitude>=nyc_airports[airport_name]['min_lat'] and latitude<=nyc_airports[airport_name]['max_lat'] and longitude>=nyc_airports[airport_name]['min_lng'] and longitude<=nyc_airports[airport_name]['max_lng']:
+    if latitude>=constants.nyc_airports[airport_name]['min_lat'] and latitude<=constants.nyc_airports[airport_name]['max_lat'] and longitude>=constants.nyc_airports[airport_name]['min_lng'] and longitude<=constants.nyc_airports[airport_name]['max_lng']:
         return 1
     else:
         return 0
     
 def isLowerManhattan(lat,lng):
-    if lat>=lower_manhattan_boundary['min_lat'] and lat<=lower_manhattan_boundary['max_lat'] and lng>=lower_manhattan_boundary['min_lng'] and lng<=lower_manhattan_boundary['max_lng']:
+    if lat>=constants.lower_manhattan_boundary['min_lat'] and lat<=constants.lower_manhattan_boundary['max_lat'] and lng>=constants.lower_manhattan_boundary['min_lng'] and lng<=constants.lower_manhattan_boundary['max_lng']:
         return 1
     else:
         return 0
     
 def getBorough(lat,lng):
     
-    locs=nyc_boroughs.keys()
+    locs=constants.nyc_boroughs.keys()
     for loc in locs:
-        if lat>=nyc_boroughs[loc]['min_lat'] and lat<=nyc_boroughs[loc]['max_lat'] and lng>=nyc_boroughs[loc]['min_lng'] and lng<=nyc_boroughs[loc]['max_lng']:
+        if lat>=constants.nyc_boroughs[loc]['min_lat'] and lat<=constants.nyc_boroughs[loc]['max_lat'] and lng>=constants.nyc_boroughs[loc]['min_lng'] and lng<=constants.nyc_boroughs[loc]['max_lng']:
             return loc
     return 'others'    
