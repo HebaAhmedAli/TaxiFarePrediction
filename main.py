@@ -23,20 +23,20 @@ testData=dataPreparation.addFeatureEngineering(testData)
 xTrain.to_csv("data/sample_X_train_cleaned.csv",index=False)
 xTest.to_csv("data/sample_X_test_cleaned.csv",index=False)
 testData.to_csv("data/sample_test_cleaned.csv",index=False)
-
+print(xTrain.dtypes)
 
 # TODO: Call model training and testing here.
 #lgbBst=lightGBM.getTrainedLgbModel(xTrain,yTrain)
 #lightGBM.predictAndEvaluateModel(lgbBst,xTest,yTest,xTrain,yTrain)
 
 # The best tuned paramters -we tune the paramters in colab notebook and get final results here-
-best = {'x_max_depth': 24.0, 
-        'x_subsample': 0.9988461076307639, 
-        'x_colsample': 0.38429620148564814,
-        'x_learning_rate': 0.1,
-        'x_num_leaves': 60,
+best = {'x_max_depth': 9.0,
+        'x_subsample': 0.9920618722172806,
+        'x_colsample': 0.8288999698751736,
+        'x_learning_rate': 0.06585147300487698,
+        'x_num_leaves': 50,
         'x_subsample_freq': 100,
-        'x_n_estimators': 5000
+        'x_n_estimators': 1000
         }
 lgbBst=lightGBM.getTrainedLgbModelAfterTuning(best,xTrain,yTrain,xTest,yTest)
 lightGBM.predictAndEvaluateModel(lgbBst,xTest,yTest,xTrain,yTrain)
